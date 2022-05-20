@@ -10,7 +10,7 @@ npm install
 
 ## AWS Part
 
-###1) Open your terminal and run this command:
+### 1) Open your terminal and run this command:
 
 ```bash
 aws configure
@@ -18,22 +18,22 @@ aws configure
 
 Insert your credentials and follow the steps.
 
-###2) Zip project content except aws-data folder.
+### 2) Zip project content except aws-data folder.
 
-###3) Open your terminal in the directory where trust-policy.json is stored and pass it to the create-role command:
+### 3) Open your terminal in the directory where trust-policy.json is stored and pass it to the create-role command:
 
 ```bash
 aws iam create-role --role-name {NAME_OF_ROLE} --assume-role-policy-document file://aws-data/trust-policy.json
 ```
 
-###4) The next step is to attach a policy to the role. This policy grants permissions to the lambda function to log to CloudWatch:
+### 4) The next step is to attach a policy to the role. This policy grants permissions to the lambda function to log to CloudWatch:
 
 
 ```bash
 aws iam attach-role-policy --role-name {NAME_OF_ROLE} --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 ```
 
-###5) Now we're ready to create the lambda function using the AWS CLI.
+### 5) Now we're ready to create the lambda function using the AWS CLI.
 
 Since our lambda function requires an environment variables so edit a file called environment.json in aws-data folder with your mongo db credentials. And run the following script:
 

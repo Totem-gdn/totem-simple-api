@@ -1,5 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
-const ObjectId = require("mongodb").ObjectId;
+const DATA_TYPES = ['avatars', 'items'];
 let cachedDb = null;
 
 const connectToDatabase = async () => {
@@ -12,25 +12,37 @@ const connectToDatabase = async () => {
     return db;
 }
 
-exports.handler = async ({id}, context) => {
+exports.handler = async ({pathParameters}, context) => {
     try {
+        const {id, type} = pathParameters;
+        if (!type || !DATA_TYPES.includes(type)) {
+            return {
+                status: 400,
+                message: "Wrong data, endpoints should be /avatars or /items",
+                data: []
+            };
+        }
         if (!id) {
             return {
-                statusCode: 200,
-                body: "Please provide the ID",
+                status: 400,
+                message: "Please provide the Public Key",
+                data: []
             };
         }
         context.callbackWaitsForEmptyEventLoop = false;
         const db = await connectToDatabase();
-        const user = await db.collection(process.env.MONGODB_COLLECTION).findOne(ObjectId(id));
+        const data = await db.collection(type === 'avatars' ? process.env.MONGODB_AVATARS_COLLECTION : process.env.MONGODB_ITEMS_COLLECTION).findOne({ 'owner._id': id });
+
         return {
-            statusCode: 200,
-            body: JSON.stringify(user),
+            status: 200,
+            message: "OK",
+            data: JSON.stringify(data)
         };
     } catch (error) {
         return {
-            statusCode: 400,
-            body: error?.toString() || 'An error occurred',
+            status: 400,
+            message: error?.toString() || 'An error occurred',
+            data: []
         };
     }
 };

@@ -2,6 +2,7 @@
   "Variables": {
     "MONGODB_URI": "",
     "MONGODB_DATABASE": "",
-    "MONGODB_COLLECTION": ""
+    "MONGODB_AVATARS_COLLECTION": "",
+    "MONGODB_ITEMS_COLLECTION": ""
   }
 }

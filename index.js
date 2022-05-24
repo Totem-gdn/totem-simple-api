@@ -31,12 +31,12 @@ exports.handler = async ({pathParameters}, context) => {
         }
         context.callbackWaitsForEmptyEventLoop = false;
         const db = await connectToDatabase();
-        const data = await db.collection(type === 'avatars' ? process.env.MONGODB_AVATARS_COLLECTION : process.env.MONGODB_ITEMS_COLLECTION).findOne({ 'owner._id': id });
+        const data = await db.collection(type === 'avatars' ? process.env.MONGODB_AVATARS_COLLECTION : process.env.MONGODB_ITEMS_COLLECTION).findOne({ 'owner': id });
 
         return {
             status: 200,
             message: "OK",
-            data: JSON.stringify(data)
+            data: data
         };
     } catch (error) {
         return {

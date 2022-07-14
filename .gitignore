@@ -111,3 +111,5 @@ dist
 *.launch
 .settings/
 *.sublime-workspace
+
+totem-simple-api.zip

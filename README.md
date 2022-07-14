@@ -20,6 +20,10 @@ Insert your credentials and follow the steps.
 
 ### 2) Zip project content except aws-data folder.
 
+```bash
+zip -vrX totem-simple-api.zip . -x "*.DS_Store" -i "*.js" "node_modules/**" package.json package-lock.json
+```
+
 ### 3) Open your terminal in the directory where trust-policy.json is stored and pass it to the create-role command:
 
 ```bash

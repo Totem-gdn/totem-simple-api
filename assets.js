@@ -425,15 +425,43 @@ function getRandomInt (min, max) {
   return parseInt((Math.random() * (max - min) + min).toFixed(0), 10);
 }
 
-function * generator (collection) {
+function randomHex () {
+  return `#${('00000' + Math.floor(Math.random() * Math.pow(16, 6)).toString(16)).slice(-6)}`;
+}
+
+function randomDarkHex () {
+  let color = '';
+  for (let i = 0; i < 3; i++) {
+    color += ('0' + Math.floor((Math.random() * Math.pow(16, 2)) / 2).toString(16)).slice(-2);
+  }
+  return `#${color}`;
+}
+
+function randomLightHex () {
+  let color = '';
+  for (let i = 0; i < 3; i++) {
+    color += ('0' + Math.floor(((1 + Math.random()) * Math.pow(16, 2)) / 2).toString(16)).slice(-2);
+  }
+  return `#${color}`;
+}
+
+function * generator (collection, modifier) {
   // if lambda not cached -- start from random collection item, then normal loop
   const initIdx = getRandomInt(0, collection.length - 1);
   for (let idx = initIdx; idx < collection.length; idx++) {
-    yield collection[idx];
+    if (modifier) {
+      yield modifier(collection[idx]);
+    } else {
+      yield collection[idx];
+    }
   }
   while (true) {
     for (const idx in collection) {
-      yield collection[idx];
+      if (modifier) {
+        yield modifier(collection[idx]);
+      } else {
+        yield collection[idx];
+      }
     }
   }
 }
@@ -444,7 +472,10 @@ module.exports = {
     items: [...spears],
   },
   generators: {
-    avatars: generator(avatars),
+    avatars: generator(avatars, (a) => {
+      a.clothingColor = randomHex();
+      return a;
+    }),
     items: generator([...spears]),
   },
 };
